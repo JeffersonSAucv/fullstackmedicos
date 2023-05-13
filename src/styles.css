@@ -25,3 +25,8 @@ body {
 .m-10{
   margin: 10px;
 }
+
+.py-10{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}

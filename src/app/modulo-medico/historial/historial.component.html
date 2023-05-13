@@ -1,5 +1,13 @@
 <div class="example-container m-12">
-  <h1>Lista de Pacientes</h1>
+  <h2>
+    <button
+      mat-icon-button
+      [routerLink]="['/medicina/paciente/listado']"
+    >
+      <mat-icon>arrow_back_ios</mat-icon>
+    </button>
+    Registros médicos de {{ pacienteData.nombre }}
+  </h2>
   <div class="m-10">
     <form [formGroup]="formFilter">
       <mat-form-field class="mx-10">
@@ -17,28 +25,37 @@
 
   <div *ngIf="showForm" class="card m-10 py-10 mat-elevation-z3">
     <h2 class="text-center">
-      Registro de Pacientes - {{ formPaciente.value.id ? "Edición" : "Nuevo" }}
+      Registro de Historial - {{ formHistorial.value.id ? "Edición" : "Nuevo" }}
     </h2>
-    <form [formGroup]="formPaciente">
+    <form [formGroup]="formHistorial">
       <mat-form-field class="mx-10">
-        <mat-label>Documento</mat-label>
-        <input
-          matInput
-          placeholder="Numero Documento"
-          formControlName="documento"
-        />
-        <mat-hint>Ingrese un documento</mat-hint>
-      </mat-form-field>
-      <mat-form-field class="mx-10">
-        <mat-label>Nombres</mat-label>
-        <input matInput placeholder="Nombres" formControlName="nombres" />
-        <mat-hint>Ingrese un nombre</mat-hint>
+        <mat-label>Fecha</mat-label>
+        <input matInput formControlName="fecha" [matDatepicker]="picker" />
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
 
       <mat-form-field class="mx-10">
-        <mat-label>Edad</mat-label>
-        <input matInput placeholder="Edad" formControlName="edad" />
-        <mat-hint>Ingrese una edad</mat-hint>
+        <mat-label>Área</mat-label>
+        <input matInput formControlName="area" type="text" />
+      </mat-form-field>
+
+      <mat-form-field class="mx-10">
+        <mat-label>Medico</mat-label>
+        <input matInput formControlName="medico" type="text" />
+      </mat-form-field>
+
+      <mat-form-field class="mx-10">
+        <mat-label>Descripcion</mat-label>
+        <input matInput formControlName="descripcion" type="text" />
+      </mat-form-field>
+
+      <mat-form-field class="mx-10">
+        <mat-label>Hospital</mat-label>
+        <input matInput formControlName="hospital" type="text" />
       </mat-form-field>
 
       <button mat-flat-button color="primary" (click)="guardar()" class="mx-10">
@@ -61,39 +78,34 @@
       matSortDisableClear
       matSortDirection="asc"
     >
-      <ng-container matColumnDef="documento">
-        <th mat-header-cell *matHeaderCellDef>Numero Documento</th>
-        <td mat-cell *matCellDef="let row">{{ row.documento }}</td>
+      <ng-container matColumnDef="fecha">
+        <th mat-header-cell *matHeaderCellDef>Fecha</th>
+        <td mat-cell *matCellDef="let row">{{ row.fecha }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="nombres">
-        <th mat-header-cell *matHeaderCellDef>Nombres</th>
-        <td mat-cell *matCellDef="let row">{{ row.nombres }}</td>
+      <ng-container matColumnDef="area">
+        <th mat-header-cell *matHeaderCellDef>Área</th>
+        <td mat-cell *matCellDef="let row">{{ row.area }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="edad">
-        <th mat-header-cell *matHeaderCellDef>Edad</th>
+      <ng-container matColumnDef="medico">
+        <th mat-header-cell *matHeaderCellDef>Medico</th>
         <td mat-cell *matCellDef="let row">
-          {{ row.edad }}
+          {{ row.medico }}
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="registros">
-        <th mat-header-cell *matHeaderCellDef>Registros</th>
+      <ng-container matColumnDef="descripcion">
+        <th mat-header-cell *matHeaderCellDef>Descripcion</th>
         <td mat-cell *matCellDef="let row">
-          <button
-            mat-raised-button
-            color="primary"
-            focusable="false"
-            [routerLink]="['/medicina/paciente/historial']"
-            [queryParams]="{
-              id: row.id,
-              nombre: row.nombres,
-              documento: row.documento
-            }"
-          >
-            Ver historial
-          </button>
+          {{ row.descripcion }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="hospital">
+        <th mat-header-cell *matHeaderCellDef>Hospital</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.hospital }}
         </td>
       </ng-container>
 
@@ -127,7 +139,7 @@
       <!-- Si no tiene datos muestra un mensaje -->
 
       <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell text-center" colspan="5">No hay datos</td>
+        <td class="mat-cell text-center" colspan="6">No hay datos</td>
       </tr>
     </table>
     <mat-paginator

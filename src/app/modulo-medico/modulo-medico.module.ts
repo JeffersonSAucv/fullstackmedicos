@@ -14,11 +14,13 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ModuloMedicoRoutingModule } from './modulo-medico-routing.module';
 import { PacienteListComponent } from './pacientes/pacientes-list.component';
-
+import { HistorialComponent } from './historial/historial.component';
+import { MatNativeDateModule } from '@angular/material/core';
 @NgModule({
-  declarations: [PacienteListComponent],
+  declarations: [PacienteListComponent, HistorialComponent],
   imports: [
     ModuloMedicoRoutingModule,
     CommonModule,
@@ -37,6 +39,8 @@ import { PacienteListComponent } from './pacientes/pacientes-list.component';
     MatSelectModule,
     ReactiveFormsModule,
     FormsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
 })
 export class ModuloMedicoModule {}

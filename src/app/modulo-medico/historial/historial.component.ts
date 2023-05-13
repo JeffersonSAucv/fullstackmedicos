@@ -3,27 +3,53 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { PacientesService } from './pascientes-list.service';
 import { v4 as uuid } from 'uuid';
+import { ActivatedRoute, Router } from '@angular/router';
+// import { historialService } from './pascientes-list.service';
+
+const nn = (n: number) => (n < 10 ? '0' + n : n);
+export interface Historial {
+  id: number | string;
+  fecha: string;
+  area: string;
+  medico: string;
+  descripcion: string;
+  hospital: string;
+}
 
 @Component({
-  selector: 'pacientes-list',
-  templateUrl: './pacientes-list.component.html',
-  styleUrls: ['./pacientes-list.component.css'],
+  selector: 'historial',
+  templateUrl: './historial.component.html',
+  styleUrls: ['./historial.component.css'],
 })
-export class PacienteListComponent implements OnInit {
-  displayedColumns: string[] = ['documento', 'nombres', 'edad','registros', 'editar'];
-  data: any[] = [];
+export class HistorialComponent implements OnInit {
+  displayedColumns: string[] = [
+    'fecha',
+    'area',
+    'medico',
+    'descripcion',
+    'hospital',
+    'editar',
+  ];
+  data: Historial[] = [];
   isLoadingResults = true;
-  dataSource = new MatTableDataSource<any>(this.data);
+  dataSource = new MatTableDataSource<Historial>(this.data);
   mensaje: string = '';
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   formFilter: FormGroup = new FormGroup({});
-  formPaciente: FormGroup = new FormGroup({});
+  formHistorial: FormGroup = new FormGroup({});
   showForm: boolean = false;
 
+  pacienteData = {
+    id: '',
+    documento: '',
+    nombre: '',
+  };
+
   constructor(
-    private api: PacientesService,
+    // private api: historialService,
+    private router: Router,
+    private route: ActivatedRoute,
     public dialogo: MatDialog,
     private formBuilder: FormBuilder
   ) {}
@@ -38,33 +64,34 @@ export class PacienteListComponent implements OnInit {
       this.dataSource.filter = (value.filtro || '').trim().toLowerCase();
     });
 
-    this.formPaciente = this.formBuilder.group({
+    this.formHistorial = this.formBuilder.group({
       id: [''],
-      documento: ['', Validators.required],
-      nombres: ['', Validators.required],
-      edad: ['', Validators.required],
+      fecha: ['', Validators.required],
+      area: ['', Validators.required],
+      medico: ['', Validators.required],
+      descripcion: ['', Validators.required],
+      hospital: ['', Validators.required],
     });
 
-    this.listarCompras();
+    this.route.queryParams.subscribe((params) => {
+      this.pacienteData = params as any;
+      this.listar();
+    });
   }
 
-  listarCompras() {
+  listar() {
     this.dataSource.data = [
       {
         id: 1,
-        documento: '123456789',
-        nombres: 'Juan Perez',
-        edad: 25,
-      },
-      {
-        id: 2,
-        documento: '987654321',
-        nombres: 'Maria Perez',
-        edad: 25,
+        fecha: '04/05/2023',
+        area: 'Medicina General',
+        medico: 'Dr. Juan Perez',
+        descripcion: 'Dolor de cabeza',
+        hospital: 'Hospital San Juan de Dios',
       },
     ];
     /* AQUI VA EL LLAMADO AL SERVICIO */
-    // this.api.obtenerpacientes().subscribe({
+    // this.api.obtenerhistorial().subscribe({
     //   next: (res: any[]) => {
     //     this.data = res;
     //     this.isLoadingResults = false;
@@ -83,11 +110,6 @@ export class PacienteListComponent implements OnInit {
     // });
   }
 
-  // buscar() {
-  //   const { filtro } = this.formFilter.value;
-  //   this.dataSource.filter = (filtro || '').trim().toLowerCase();
-  // }
-
   limpiar() {
     this.formFilter.setValue({
       filtro: '',
@@ -95,28 +117,29 @@ export class PacienteListComponent implements OnInit {
   }
 
   agregar() {
-    this.formPaciente.reset();
+    this.formHistorial.reset();
+    this.formHistorial.controls['fecha'].setValue(new Date());
     this.showForm = true;
   }
 
   editar(row: any) {
-    this.formPaciente.setValue({
-      id: row.id,
-      documento: row.documento,
-      nombres: row.nombres,
-      edad: row.edad,
+    const v = { ...row };
+    v.fecha = this.parseString2Date(v.fecha);
+    this.formHistorial.setValue({
+      ...v,
     });
     this.showForm = true;
   }
 
   cancelar() {
     this.showForm = false;
-    this.formPaciente.reset();
+    this.formHistorial.reset();
   }
 
   guardar() {
-    if(this.formPaciente.invalid) return
-    const form = this.formPaciente.value;
+    if (this.formHistorial.invalid) return;
+    const form = this.formHistorial.value;
+    form.fecha = this.parseDate(form.fecha);
     /* AQUI VA EL LLAMADO AL SERVICIO */
     if (form.id) {
       this.dataSource.data = this.dataSource.data.map((item: any) => {
@@ -131,7 +154,7 @@ export class PacienteListComponent implements OnInit {
     }
     this.dataSource.data = [...this.dataSource.data];
     this.showForm = false;
-    this.formPaciente.reset();
+    this.formHistorial.reset();
   }
 
   eliminar(row: any) {
@@ -140,5 +163,16 @@ export class PacienteListComponent implements OnInit {
       (item: any) => item.id != row.id
     );
     this.dataSource.data = [...this.dataSource.data];
+  }
+
+  parseDate(date: Date) {
+    return `${nn(date.getDate())}/${nn(
+      date.getMonth() + 1
+    )}/${date.getFullYear()}`;
+  }
+
+  parseString2Date(date: string) {
+    const [d, m, y] = date.split('/').map((n) => parseInt(n));
+    return new Date(y, m - 1, d);
   }
 }
