@@ -12,7 +12,7 @@ import { v4 as uuid } from 'uuid';
   styleUrls: ['./pacientes-list.component.css'],
 })
 export class PacienteListComponent implements OnInit {
-  displayedColumns: string[] = ['documento', 'nombres', 'edad','registros', 'editar'];
+  displayedColumns: string[] = ['dni', 'apellidoPaterno', 'apellidoMaterno','fechaNacimiento', 'sexo', 'telefono', 'correo', 'fechaIngreso' , 'editar'];
   data: any[] = [];
   isLoadingResults = true;
   dataSource = new MatTableDataSource<any>(this.data);
@@ -49,7 +49,7 @@ export class PacienteListComponent implements OnInit {
   }
 
   listarCompras() {
-    this.dataSource.data = [
+    /* this.dataSource.data = [
       {
         id: 1,
         documento: '123456789',
@@ -62,25 +62,26 @@ export class PacienteListComponent implements OnInit {
         nombres: 'Maria Perez',
         edad: 25,
       },
-    ];
+    ]; */
     /* AQUI VA EL LLAMADO AL SERVICIO */
-    // this.api.obtenerpacientes().subscribe({
-    //   next: (res: any[]) => {
-    //     this.data = res;
-    //     this.isLoadingResults = false;
-    //     this.dataSource = new MatTableDataSource<any>(this.data);
-    //     this.dataSource.paginator = this.paginator;
-    //   },
-    //   error: (e) => {
-    //     console.log(e);
-    //     if (String(e).split(' ')[1] == '404') {
-    //       this.isLoadingResults = false;
-    //       this.data = [];
-    //       this.dataSource = new MatTableDataSource<any>(this.data);
-    //       this.dataSource.paginator = this.paginator;
-    //     }
-    //   },
-    // });
+    this.api.obtenerpacientes().subscribe({
+      next: (res: any[]) => {
+        debugger;
+        this.data = res;
+        this.isLoadingResults = false;
+        this.dataSource = new MatTableDataSource<any>(this.data);
+        this.dataSource.paginator = this.paginator;
+      },
+      error: (e) => {
+        console.log(e);
+        if (String(e).split(' ')[1] == '404') {
+          this.isLoadingResults = false;
+          this.data = [];
+          this.dataSource = new MatTableDataSource<any>(this.data);
+          this.dataSource.paginator = this.paginator;
+        }
+      },
+    });
   }
 
   // buscar() {

@@ -3,10 +3,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment.development';
 import { Observable } from "rxjs";
 import {catchError,tap} from 'rxjs/operators';
-import { Compra } from '../models/compra';
-import { TransaccionCompra } from '../models/transaccionCompra';
-import { Respuesta } from '../models/respuesta';
-import { EditCompraListaDetalle } from '../models/editCompraListaDetalle';
+import { Compra } from '../core/models/compra';
+import { TransaccionCompra } from '../core/models/transaccionCompra';
+import { Respuesta } from '../core/models/respuesta';
+import { EditCompraListaDetalle } from '../core/models/editCompraListaDetalle';
 const headerCommon={headers:new HttpHeaders( { 'Content-Type': 'application/json',
 'Authorization':'Bearer '+sessionStorage.getItem('token')
 })}

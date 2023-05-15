@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Usuario } from '../models/usuario';
+import { Usuario } from '../core/models/usuario';
 import { Constants } from '../utils/constants';
 import { LoginService } from './login.service';
 

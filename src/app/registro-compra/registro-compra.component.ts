@@ -8,11 +8,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CompraService } from '../compra-list/compra.service';
 import { DialogAlertComponent } from '../dialog-alert/dialog-alert.component';
 import { DialogoConfirmacionComponent } from '../dialogo-confirmacion/dialogo-confirmacion.component';
-import { EditCompraListaDetalle } from '../models/editCompraListaDetalle';
-import { EliminarCompraListDetalle } from '../models/eliminarCompraListaDetalle';
-import { ListaDetalleCompra } from '../models/listarDetalleCompra';
-import { Respuesta } from '../models/respuesta';
-import { TransaccionCompra } from '../models/transaccionCompra';
+import { EditCompraListaDetalle } from '../core/models/editCompraListaDetalle';
+import { EliminarCompraListDetalle } from '../core/models/eliminarCompraListaDetalle';
+import { ListaDetalleCompra } from '../core/models/listarDetalleCompra';
+import { Respuesta } from '../core/models/respuesta';
+import { TransaccionCompra } from '../core/models/transaccionCompra';
 import { Constants } from '../utils/constants';
 export class MyErrorStateMatcher implements ErrorStateMatcher{
   isErrorState(control:FormControl | null,form:FormGroupDirective | NgForm | null):boolean

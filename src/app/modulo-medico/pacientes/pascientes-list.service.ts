@@ -13,7 +13,7 @@ export class PacientesService {
   private readonly API_URL = environment.apiUrl;
 
   obtenerpacientes(): Observable<any[]> {
-    return this.http.get<any[]>(this.API_URL + '/api/compra/List', {
+    return this.http.get<any[]>(this.API_URL + '/api/Trabajador/ListaTrabajadores', {
       headers: getHeaders(),
     });
   }
